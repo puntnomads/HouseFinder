@@ -36,10 +36,12 @@ router.get("/listings", async (req, res, next) => {
     const listings = [];
     for (let postcode of postcodes) {
       const response = await axios.get(`${listingsUrl}${postcode}`);
-      const listing = response.data;
-      listings.push(listing);
+      const data = response.data;
+      data.listing.forEach(function(listing) {
+        listings.push(listing);
+      });
     }
-    res.json(listings);
+    res.json({ listings: listings });
   } catch (e) {
     //this will eventually be handled by your error handling middleware
     next(e);

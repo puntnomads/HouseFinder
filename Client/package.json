@@ -17,19 +17,16 @@
   },
   "devDependencies": {
     "electron": "^1.7.10",
-    "foreman": "^2.0.0",
     "react-scripts": "1.0.17"
   },
   "main": "main.js",
   "homepage": "./",
   "scripts": {
-    "start": "nf start",
+    "start":
+      "react-scripts start REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4000",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "electron": "electron .",
-    "electron-start": "node electron-wait-react",
-    "react-start":
-      "REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4000 react-scripts start"
+    "electron": "electron ."
   }
 }

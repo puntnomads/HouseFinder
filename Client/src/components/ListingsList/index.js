@@ -21,16 +21,21 @@ class Listings extends Component {
     const {
       listingsList: { requesting, successful, messages, errors, listings }
     } = this.props;
+    console.log(listings);
+
     return (
       <div className="companieslistpage">
+        <h1>Hello</h1>
         <Grid>
           <Row>
             <Col xs={10} xsOffset={1} md={6} mdOffset={3}>
               <ListGroup>
                 {listings &&
                   listings.map((listing, i) => (
-                    <Link key={i} to={`/${listing.slug}/project-list`}>
-                      <ListGroupItem>{listing.name}</ListGroupItem>
+                    <Link key={i} to={listing.details_url}>
+                      <ListGroupItem>
+                        {listing.displayable_address}
+                      </ListGroupItem>
                     </Link>
                   ))}
               </ListGroup>

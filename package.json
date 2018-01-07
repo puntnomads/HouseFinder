@@ -1,0 +1,18 @@
+{
+  "name": "house-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start":
+      "concurrently \"npm run server\" \"npm run react-start\" \"npm run electron-start\"",
+    "server": "nodemon ./server/bin/www",
+    "react-start": "cd client && npm start",
+    "electron-start": "cd client && node ./electron-wait-react"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.5.1"
+  }
+}
