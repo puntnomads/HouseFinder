@@ -39,8 +39,6 @@ router.get("/listings", async (req, res, next) => {
       const listing = response.data;
       listings.push(listing);
     }
-    // const response = await axios.get(`${listingsUrl}sm1`);
-    // const listing = response.data;
     res.json(listings);
   } catch (e) {
     //this will eventually be handled by your error handling middleware

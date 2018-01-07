@@ -1,0 +1,35 @@
+{
+  "name": "house-finder-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.17.1",
+    "bootstrap": "^3.3.7",
+    "react": "^16.2.0",
+    "react-bootstrap": "^0.31.5",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.6",
+    "react-router": "^4.2.0",
+    "react-router-bootstrap": "^0.24.4",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-saga": "^0.16.0"
+  },
+  "devDependencies": {
+    "electron": "^1.7.10",
+    "foreman": "^2.0.0",
+    "react-scripts": "1.0.17"
+  },
+  "main": "main.js",
+  "homepage": "./",
+  "scripts": {
+    "start": "nf start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-start": "node electron-wait-react",
+    "react-start":
+      "REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4000 react-scripts start"
+  }
+}
