@@ -1,49 +1,49 @@
 import {
-  LISTINGS_GETTING,
-  LISTINGS_GETTING_SUCCESS,
-  LISTINGS_GETTING_ERROR
+  POSTCODES_GETTING,
+  POSTCODES_GETTING_SUCCESS,
+  POSTCODES_GETTING_ERROR
 } from "./constants";
 
 const initialState = {
-  listings: [],
+  postcodes: [],
   requesting: false,
   successful: false,
   messages: [],
   errors: []
 };
 
-const reducer = function listingsReducer(state = initialState, action) {
+const reducer = function postcodesReducer(state = initialState, action) {
   switch (action.type) {
-    case LISTINGS_GETTING:
+    case POSTCODES_GETTING:
       return {
         ...state,
         requesting: true,
         successful: false,
         messages: [
           {
-            body: "Listings are being requested from the back-end.",
+            body: "Postcodes are being requested from the back-end.",
             time: new Date()
           }
         ],
         errors: []
       };
 
-    case LISTINGS_GETTING_SUCCESS:
+    case POSTCODES_GETTING_SUCCESS:
       return {
         ...state,
-        listings: action.listings,
+        postcodes: action.postcodes,
         requesting: false,
         successful: true,
         messages: [
           {
-            body: "Listings have successfully received from the back-end.",
+            body: "Postcodes have successfully received from the back-end.",
             time: new Date()
           }
         ],
         errors: []
       };
 
-    case LISTINGS_GETTING_ERROR:
+    case POSTCODES_GETTING_ERROR:
       return {
         ...state,
         requesting: false,

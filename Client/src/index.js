@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { Router } from "react-router";
 import history from "./history";
-import ListingsList from "./components/ListingsList/index";
+import Main from "./components/Main";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
 
@@ -32,7 +32,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <div>
-        <ListingsList />
+        <Main />
       </div>
     </Router>
   </Provider>,

@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
-import listingsList from "./components/ListingsList/reducer";
+import postcodesList from "./components/PostcodesList/reducer";
+import propertiesList from "./components/PropertiesList/reducer";
 
 const IndexReducer = combineReducers({
-  listingsList
+  postcodesList,
+  propertiesList
 });
 
 export default IndexReducer;

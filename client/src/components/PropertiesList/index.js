@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { listingsGet } from "./actions";
+import { propertiesGet } from "./actions";
 import {
   Grid,
   Row,
@@ -12,29 +12,30 @@ import {
 } from "react-bootstrap";
 import "./index.css";
 
-class Listings extends Component {
+class PropertiesList extends Component {
   componentDidMount() {
-    this.props.listingsGet();
+    const postcode = this.props.match.params.postcode;
+    this.props.propertiesGet(postcode);
   }
 
   render() {
     const {
-      listingsList: { requesting, successful, messages, errors, listings }
+      propertiesList: { requesting, successful, messages, errors, properties }
     } = this.props;
-    console.log(listings);
+    console.log("PropertiesList: ", properties);
 
     return (
       <div className="companieslistpage">
-        <h1>Hello</h1>
+        <h1>Properties</h1>
         <Grid>
           <Row>
             <Col xs={10} xsOffset={1} md={6} mdOffset={3}>
               <ListGroup>
-                {listings &&
-                  listings.map((listing, i) => (
-                    <Link key={i} to={listing.details_url}>
+                {properties &&
+                  properties.map((property, i) => (
+                    <Link key={i} to={property.details_url}>
                       <ListGroupItem>
-                        {listing.displayable_address}
+                        {property.displayable_address}
                       </ListGroupItem>
                     </Link>
                   ))}
@@ -48,9 +49,9 @@ class Listings extends Component {
 }
 
 const mapStateToProps = state => ({
-  listingsList: state.listingsList
+  propertiesList: state.propertiesList
 });
 
-const connected = connect(mapStateToProps, { listingsGet })(Listings);
+const connected = connect(mapStateToProps, { propertiesGet })(PropertiesList);
 
 export default connected;

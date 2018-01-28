@@ -5,9 +5,11 @@
   "dependencies": {
     "axios": "^0.17.1",
     "bootstrap": "^3.3.7",
+    "concurrently": "^3.5.1",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.2.0",
+    "react-electron-web-view": "^2.0.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-bootstrap": "^0.24.4",
@@ -22,8 +24,9 @@
   "main": "main.js",
   "homepage": "./",
   "scripts": {
-    "start":
-      "react-scripts start REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4000",
+    "start": "concurrently \"npm run react-start BROWSER=none\" \"npm run electron-start\"",
+    "electron-start": "node ./electron-wait-react",
+    "react-start": "react-scripts start REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4000",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
