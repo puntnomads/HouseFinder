@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Listing = new Schema(
+const Property = new Schema(
   {
     status: {
       type: String,
@@ -14,4 +14,4 @@ const Listing = new Schema(
   }
 );
 
-module.exports = mongoose.model("Listing", Listing);
+module.exports = mongoose.model("Property", Property);

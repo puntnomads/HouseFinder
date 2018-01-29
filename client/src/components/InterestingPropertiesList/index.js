@@ -12,14 +12,19 @@ import {
 } from "react-bootstrap";
 import "./index.css";
 
-class PropertiesList extends Component {
+class InterestingPropertiesList extends Component {
   componentDidMount() {
-    const postcode = this.props.match.params.postcode;
-    this.props.propertiesGet(postcode);
+    this.props.propertiesGet();
   }
   render() {
     const {
-      propertiesList: { requesting, successful, messages, errors, properties }
+      interestingPropertiesList: {
+        requesting,
+        successful,
+        messages,
+        errors,
+        properties
+      }
     } = this.props;
     return (
       <div className="companieslistpage">
@@ -46,9 +51,11 @@ class PropertiesList extends Component {
 }
 
 const mapStateToProps = state => ({
-  propertiesList: state.propertiesList
+  interestingPropertiesList: state.interestingPropertiesList
 });
 
-const connected = connect(mapStateToProps, { propertiesGet })(PropertiesList);
+const connected = connect(mapStateToProps, { propertiesGet })(
+  InterestingPropertiesList
+);
 
 export default connected;

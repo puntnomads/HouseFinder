@@ -26,6 +26,9 @@ class PostcodesList extends Component {
     return (
       <div className="companieslistpage">
         <h1>Postcodes</h1>
+        <Link to={"/interesting_properties"}>
+          <button>Interesting Properties</button>
+        </Link>
         <Grid>
           <Row>
             <Col xs={10} xsOffset={1} md={6} mdOffset={3}>

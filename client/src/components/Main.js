@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import PostcodesList from "./PostcodesList";
 import PropertiesList from "./PropertiesList";
 import Property from "./Property";
+import InterestingPropertiesList from "./InterestingPropertiesList";
 
 export default class Main extends Component {
   render() {
@@ -11,7 +12,11 @@ export default class Main extends Component {
         <Switch>
           <Route exact path="/" component={PostcodesList} />
           <Route path="/properties/:postcode" component={PropertiesList} />
-          <Route path="/hi" component={Property} />
+          <Route path="/property/:propertyId" component={Property} />
+          <Route
+            path="/interesting_properties"
+            component={InterestingPropertiesList}
+          />
           <Route
             render={function() {
               return <p>Not Found</p>;
