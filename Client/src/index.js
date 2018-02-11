@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { applyMiddleware, createStore, compose } from "redux";
 import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
-import { Router } from "react-router";
+import { Router, Redirect } from "react-router";
 import history from "./history";
 import Main from "./components/Main";
 import "bootstrap/dist/css/bootstrap.css";
@@ -32,6 +32,7 @@ ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <div style={{ width: "100%", height: "100%" }}>
+        {window.location.pathname.includes("index.html") && <Redirect to="/" />}
         <Main />
       </div>
     </Router>

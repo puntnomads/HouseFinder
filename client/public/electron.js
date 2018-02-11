@@ -4,8 +4,8 @@ const app = electron.app;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+const isDev = require("electron-is-dev");
 const path = require("path");
-const url = require("url");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -16,14 +16,11 @@ function createWindow() {
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
   // and load the index.html of the app.
-  const startUrl =
-    process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, "/../build/index.html"),
-      protocol: "file:",
-      slashes: true
-    });
-  mainWindow.loadURL(startUrl);
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  );
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
@@ -62,4 +59,5 @@ app.on("activate", function() {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
-// https://medium.freecodecamp.org/building-an-electron-application-with-create-react-app-97945861647c
+// https://medium.freecodecamp.org/heres-how-i-created-a-markdown-app-with-electron-and-react-1e902f8601ca
+// https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { propertyGet, propertyUpdate } from "./actions";
 import "./index.css";
-const WebView = require("react-electron-web-view");
 
 class Property extends Component {
   componentDidMount() {
@@ -30,10 +29,11 @@ class Property extends Component {
         <button onClick={() => this.interestProperty(property._id)}>
           Interesting
         </button>
-        <WebView
-          src={url}
+        <webview
+          is
+          nodeintegration
           style={{ width: "100%", height: "100%" }}
-          className="height-large"
+          src={url}
         />
       </div>
     );

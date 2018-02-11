@@ -1,14 +1,27 @@
 {
-  "name": "house-finder-client",
+  "name": "house-finder",
   "version": "0.1.0",
+  "main": "public/electron.js",
+  "homepage": "./",
   "private": true,
+  "scripts": {
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron-start": "electron .",
+    "start":
+      "concurrently \"REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4001 BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "build —-em.main=build/electron.js",
+    "build": "npm run react-build"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "bootstrap": "^3.3.7",
+    "electron-is-dev": "^0.3.0",
     "react": "^16.2.0",
     "react-bootstrap": "^0.31.5",
     "react-dom": "^16.2.0",
-    "react-electron-web-view": "^2.0.1",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-bootstrap": "^0.24.4",
@@ -20,17 +33,14 @@
     "concurrently": "^3.5.1",
     "electron": "^1.7.10",
     "electron-builder": "^19.56.0",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.0.17",
+    "wait-on": "^2.1.0"
   },
-  "main": "main.js",
-  "homepage": "./",
-  "scripts": {
-    "start": "concurrently \"npm run react-start REACT_APP_HOUSE_FINDER_BASE_URL=http://localhost:4001 BROWSER=none\" \"npm run electron-start\"",
-    "electron-start": "node ./electron-wait-react",
-    "react-start": "react-scripts start",
-    "build": "electron-packager . --platform=darwin --arch=x64 --electron-version=0.27.2 VideoPlayer --ignore=node_modules/electron-*",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "electron": "electron ."
+  "build": {
+    "appId": "com.house-finder",
+    "files": ["build/**/*", "node_modules/**/*"],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }
