@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import createSagaMiddleware from "redux-saga";
 import { Router, Redirect } from "react-router";
 import history from "./history";
+import NavBar from "./components/NavBar";
 import Main from "./components/Main";
 import "bootstrap/dist/css/bootstrap.css";
 import "./index.css";
@@ -33,6 +34,7 @@ ReactDOM.render(
     <Router history={history}>
       <div style={{ width: "100%", height: "100%" }}>
         {window.location.pathname.includes("index.html") && <Redirect to="/" />}
+        <NavBar />
         <Main />
       </div>
     </Router>
