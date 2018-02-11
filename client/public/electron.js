@@ -7,6 +7,9 @@ const BrowserWindow = electron.BrowserWindow;
 const isDev = require("electron-is-dev");
 const path = require("path");
 
+// start the server
+const server = require("/Users/puntnomads/Downloads/house-finder/server/server.js");
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -23,7 +26,7 @@ function createWindow() {
   );
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  isDev && mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
