@@ -8,7 +8,7 @@ import InterestingPropertiesList from "./InterestingPropertiesList";
 export default class Main extends Component {
   render() {
     return (
-      <div>
+      <div style={{ width: "100%", height: "100%" }}>
         <Switch>
           <Route exact path="/" component={PostcodesList} />
           <Route path="/properties/:postcode" component={PropertiesList} />

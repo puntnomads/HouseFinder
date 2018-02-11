@@ -31,7 +31,7 @@ sagaMiddleware.run(IndexSagas);
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <div>
+      <div style={{ width: "100%", height: "100%" }}>
         <Main />
       </div>
     </Router>

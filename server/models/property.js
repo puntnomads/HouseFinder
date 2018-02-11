@@ -10,7 +10,8 @@ const Property = new Schema(
     }
   },
   {
-    strict: false
+    strict: false,
+    timestamps: true
   }
 );
 

@@ -23,7 +23,7 @@ class Property extends Component {
     } = this.props;
     const url = this.props.property.property.details_url;
     return (
-      <div>
+      <div style={{ width: "100%", height: "100%" }}>
         <button onClick={() => this.dismissProperty(property._id)}>
           Dismissed
         </button>
@@ -32,7 +32,7 @@ class Property extends Component {
         </button>
         <WebView
           src={url}
-          style={{ width: 720, height: 480 }}
+          style={{ width: "100%", height: "100%" }}
           className="height-large"
         />
       </div>
