@@ -40,9 +40,13 @@ exports.downloadListings = async function(req, res, next) {
       const response = await axios.get(`${propertiesUrl}${postcode}`);
       const data = response.data;
       data.listing.forEach(async function(listing) {
-        listing["status"] = "new";
-        let property = new Property(listing);
-        await property.save();
+        if (Property.findOne({ listing_id: listing.listing_id })) {
+          return;
+        } else {
+          listing["status"] = "new";
+          let property = new Property(listing);
+          await property.save();
+        }
       });
     }
     res.send("Download complete.");
