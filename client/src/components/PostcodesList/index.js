@@ -2,14 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { postcodesGet } from "./actions";
-import {
-  Grid,
-  Row,
-  Col,
-  ListGroup,
-  ListGroupItem,
-  Button
-} from "react-bootstrap";
+import { Grid, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
 import "./index.css";
 
 class PostcodesList extends Component {
@@ -18,17 +11,10 @@ class PostcodesList extends Component {
   }
 
   render() {
-    const {
-      postcodesList: { requesting, successful, messages, errors, postcodes }
-    } = this.props;
-    console.log("PostcodesList:", postcodes);
-
+    const { postcodesList: { postcodes } } = this.props;
     return (
       <div className="companieslistpage">
         <h1>Postcodes</h1>
-        <Link to={"/interesting_properties"}>
-          <button>Interesting Properties</button>
-        </Link>
         <Grid>
           <Row>
             <Col xs={10} xsOffset={1} md={6} mdOffset={3}>

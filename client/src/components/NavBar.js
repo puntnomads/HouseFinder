@@ -8,7 +8,7 @@ class NavBar extends Component {
       <Navbar inverse collapseOnSelect className="navbar">
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/home">VotingCode</a>
+            <a href="/">House Finder</a>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
