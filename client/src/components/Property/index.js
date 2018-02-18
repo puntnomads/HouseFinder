@@ -17,10 +17,8 @@ class Property extends Component {
     this.props.propertyUpdate(propertyId, update);
   };
   render() {
-    const {
-      property: { requesting, successful, messages, errors, property }
-    } = this.props;
-    const url = this.props.property.property.details_url;
+    const { propertyState: { property } } = this.props;
+    const url = property.details_url;
     return (
       <div style={{ width: "100%", height: "100%" }}>
         <button onClick={() => this.dismissProperty(property._id)}>
@@ -29,6 +27,7 @@ class Property extends Component {
         <button onClick={() => this.interestProperty(property._id)}>
           Interesting
         </button>
+        <span>{`Distance ${property.distance}`}</span>
         <webview
           is
           nodeintegration
@@ -41,7 +40,7 @@ class Property extends Component {
 }
 
 const mapStateToProps = state => ({
-  property: state.property
+  propertyState: state.property
 });
 
 const connected = connect(mapStateToProps, { propertyGet, propertyUpdate })(

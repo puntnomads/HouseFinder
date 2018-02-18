@@ -12,6 +12,25 @@ const postcodes = [
   { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
 ];
 
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
+}
+
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1); // deg2rad below
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
 /* GET home route. */
 exports.APIHome = function(req, res, next) {
   res.send("This is the Zoopla API.");
@@ -26,6 +45,12 @@ exports.downloadListings = async function(req, res, next) {
       data.listing.forEach(async function(listing) {
         const today = moment();
         const listingDate = moment(listing.first_published_date);
+        const distance = getDistanceFromLatLonInKm(
+          postcode.latitude,
+          postcode.longitude,
+          listing.latitude,
+          listing.longitude
+        );
         const property = await Property.findOne({
           listing_id: listing.listing_id
         });
@@ -35,7 +60,8 @@ exports.downloadListings = async function(req, res, next) {
           return;
         } else {
           listing["status"] = "new";
-          listing["original_postcode"] = postcode;
+          listing["original_postcode"] = postcode.text;
+          listing["distance"] = distance.toFixed(3);
           let property = new Property(listing);
           await property.save();
         }
@@ -58,6 +84,7 @@ exports.getPropertiesByPostcode = async function(req, res, next) {
     original_postcode: postcode,
     status: "new"
   });
+  properties.sort((a, b) => a.distance - b.distance);
   res.send({ properties: properties });
 };
 

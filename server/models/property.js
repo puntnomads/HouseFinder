@@ -8,7 +8,8 @@ const Property = new Schema(
       enum: ["new", "dismissed", "interesting"],
       default: "new"
     },
-    original_postcode: String
+    original_postcode: String,
+    distance: Number
   },
   {
     strict: false,
