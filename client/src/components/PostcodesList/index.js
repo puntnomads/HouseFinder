@@ -21,8 +21,8 @@ class PostcodesList extends Component {
               <ListGroup>
                 {postcodes &&
                   postcodes.map((postcode, i) => (
-                    <Link key={i} to={`/properties/${postcode}`}>
-                      <ListGroupItem>{postcode}</ListGroupItem>
+                    <Link key={i} to={`/properties/${postcode.text}`}>
+                      <ListGroupItem>{postcode.text}</ListGroupItem>
                     </Link>
                   ))}
               </ListGroup>

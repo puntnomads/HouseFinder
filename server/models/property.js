@@ -7,7 +7,8 @@ const Property = new Schema(
       type: String,
       enum: ["new", "dismissed", "interesting"],
       default: "new"
-    }
+    },
+    original_postcode: String
   },
   {
     strict: false,

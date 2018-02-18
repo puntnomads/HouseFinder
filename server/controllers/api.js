@@ -1,31 +1,15 @@
 const axios = require("axios"),
-  config = require("../config/main");
-Property = require("../models/property");
+  moment = require("moment"),
+  config = require("../config/main"),
+  Property = require("../models/property");
 
 const propertiesUrl = `https://api.zoopla.co.uk/api/v1/property_listings.js?api_key=${
   config.zooplaAPIKey
-}&listing_status=rent&minimum_beds=2&maximum_beds=2&minimum_price=150&maximum_price=275&order_by=price&ordering=ascending&page_size=100&postcode=`;
+}&listing_status=rent&minimum_beds=2&maximum_beds=2&minimum_price=200&maximum_price=275&page_size=100&radius=5&postcode=`;
 
 const postcodes = [
-  "CR4",
-  "CR7",
-  "KT3",
-  "SM4",
-  "SW16",
-  "SW17",
-  "SW19",
-  "SW20",
-  "SM1",
-  "SM2",
-  "SM3",
-  "SM5",
-  "SM6",
-  "SM7",
-  "KT4",
-  "KT17",
-  "CR0",
-  "CR5",
-  "CR8"
+  { text: "SW19 7NB", latitude: 51.42244, longitude: -0.20798 },
+  { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
 ];
 
 /* GET home route. */
@@ -37,13 +21,21 @@ exports.downloadListings = async function(req, res, next) {
   try {
     const properties = [];
     for (let postcode of postcodes) {
-      const response = await axios.get(`${propertiesUrl}${postcode}`);
+      const response = await axios.get(`${propertiesUrl}${postcode.text}`);
       const data = response.data;
       data.listing.forEach(async function(listing) {
-        if (Property.findOne({ listing_id: listing.listing_id })) {
+        const today = moment();
+        const listingDate = moment(listing.first_published_date);
+        const property = await Property.findOne({
+          listing_id: listing.listing_id
+        });
+        if (property) {
+          return;
+        } else if (today.diff(listingDate, "day") > 14) {
           return;
         } else {
           listing["status"] = "new";
+          listing["original_postcode"] = postcode;
           let property = new Property(listing);
           await property.save();
         }
@@ -61,7 +53,11 @@ exports.getPostcodes = function(req, res, next) {
 
 exports.getPropertiesByPostcode = async function(req, res, next) {
   const postcode = req.params.postcode;
-  const properties = await Property.find({ outcode: postcode });
+  // only get new properties fot that postcode.
+  const properties = await Property.find({
+    original_postcode: postcode,
+    status: "new"
+  });
   res.send({ properties: properties });
 };
 
