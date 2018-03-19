@@ -27,7 +27,29 @@ class Property extends Component {
         <button onClick={() => this.interestProperty(property._id)}>
           Interesting
         </button>
-        <span>{`Distance ${property.distance}`}</span>
+        <span>{`Distance ${property.distance}KM `}</span>
+        <br />
+        <span>Train Stations </span>
+        {property.train_stations &&
+          property.train_stations.map(train_station => (
+            <span>{`${train_station.name}: ${train_station.distance *
+              1000}M `}</span>
+          ))}
+        <br />
+        <span>Bus Stops </span>
+        {property.bus_stops &&
+          property.bus_stops.map(bus_stop => (
+            <span>{`${bus_stop.name}: ${bus_stop.distance * 1000}M `}</span>
+          ))}
+        <br />
+        <span>Supermarkets </span>
+        {property.supermarkets &&
+          property.supermarkets.map(supermarket => (
+            <span>{`${supermarket.name}: ${supermarket.distance *
+              1000}M `}</span>
+          ))}
+        <br />
+        <span>URL: {url}</span>
         <webview
           is
           nodeintegration

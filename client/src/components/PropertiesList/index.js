@@ -21,6 +21,9 @@ class PropertiesList extends Component {
     const {
       propertiesList: { requesting, successful, messages, errors, properties }
     } = this.props;
+    properties.sort(function(a, b) {
+      return a.distance - b.distance;
+    });
     return (
       <div className="companieslistpage">
         <h1>Properties</h1>

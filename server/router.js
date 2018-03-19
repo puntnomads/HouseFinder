@@ -15,4 +15,7 @@ module.exports = function(app) {
     "/interesting_properties",
     ApiController.getInterestingProperties
   );
+  app.use(function(err, req, res, next) {
+    console.log("error: ", err);
+  });
 };
