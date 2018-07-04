@@ -1,0 +1,14 @@
+{
+  "name": "house-finder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "cd server && nodemon server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "cd server && npm install && node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
