@@ -7,7 +7,6 @@ module.exports = function(app) {
   app.use("/api", apiRoutes);
   apiRoutes.get("/", ApiController.APIHome);
   apiRoutes.get("/download_listings", ApiController.downloadListings);
-  apiRoutes.get("/postcodes", ApiController.getPostcodes);
   apiRoutes.get("/properties/:postcode", ApiController.getPropertiesByPostcode);
   apiRoutes.get("/property/:propertyId", ApiController.getPropertyById);
   apiRoutes.put("/property/:propertyId", ApiController.updateAProperty);

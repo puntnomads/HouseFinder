@@ -7,10 +7,9 @@ import {
   propertyUpdateSuccess,
   propertyUpdateError
 } from "./actions";
-import { API_ROOT } from "../../config";
 
-const getPropertyUrl = `${API_ROOT}/api/property`;
-const updatePropertyUrl = `${API_ROOT}/api/property`;
+const getPropertyUrl = "/api/property";
+const updatePropertyUrl = "/api/property";
 
 function getPropertyApi(propertyId) {
   return axios

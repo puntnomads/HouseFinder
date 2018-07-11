@@ -16,10 +16,10 @@ const supermarketsUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch
   config.googlePlaceAPIKey
 }&rankby=distance&type=supermarket&location=`;
 
-const postcodes = [
-  { text: "SW19 7NB", latitude: 51.42244, longitude: -0.20798 },
-  { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
-];
+// const postcodes = [
+//   { text: "SW19 7NB", latitude: 51.42244, longitude: -0.20798 },
+//   { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
+// ];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,11 +46,11 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 
 /* GET home route. */
 exports.APIHome = function(req, res, next) {
-  res.send("This is the Zoopla API.");
+  res.send("This is the API.");
 };
 
 // types: https://developers.google.com/places/supported_types
-// test: https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyDwPvFIXB5ZoRYJ9mPec_37maFT1JGfkR8&rankby=distance&type=subway_station&location=51.5609,0.082067
+// test: https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=gkhgkhj&rankby=distance&type=subway_station&location=51.5609,0.082067
 exports.downloadListings = async function(req, res, next) {
   try {
     const properties = [];
@@ -149,10 +149,6 @@ exports.downloadListings = async function(req, res, next) {
   } catch (e) {
     next(e);
   }
-};
-
-exports.getPostcodes = function(req, res, next) {
-  res.send({ postcodes: postcodes });
 };
 
 exports.getPropertiesByPostcode = async function(req, res, next) {
