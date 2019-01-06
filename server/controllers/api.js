@@ -1,4 +1,5 @@
-const axios = require("axios"),
+const puppeteer = require("puppeteer"),
+  axios = require("axios"),
   moment = require("moment"),
   config = require("../config/main"),
   Property = require("../models/property");
@@ -16,10 +17,10 @@ const supermarketsUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch
   config.googlePlaceAPIKey
 }&rankby=distance&type=supermarket&location=`;
 
-// const postcodes = [
-//   { text: "SW19 7NB", latitude: 51.42244, longitude: -0.20798 },
-//   { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
-// ];
+const postcodes = [
+  { text: "SW19 7NB", latitude: 51.42244, longitude: -0.20798 },
+  { text: "E15 4LZ", latitude: 51.54339, longitude: 0.00982 }
+];
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -46,109 +47,120 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 
 /* GET home route. */
 exports.APIHome = function(req, res, next) {
-  res.send("This is the API.");
+  res.send("This is the Zoopla API.");
 };
 
-// types: https://developers.google.com/places/supported_types
-// test: https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=gkhgkhj&rankby=distance&type=subway_station&location=51.5609,0.082067
 exports.downloadListings = async function(req, res, next) {
   try {
     const properties = [];
     let count = 0;
-    for (let postcode of postcodes) {
-      const response = await axios.get(`${propertiesUrl}${postcode.text}`);
-      const listings = response.data.listing;
-      for (const listing of listings) {
-        const property = await Property.findOne({
-          listing_id: listing.listing_id
-        });
-        const today = moment();
-        const listingDate = moment(listing.first_published_date);
-        if (!property && today.diff(listingDate, "day") <= 14) {
-          console.log(property);
-          console.log(count);
-          console.log(postcode);
-          console.log(listing.listing_id);
-          count++;
-          // 10 requests per second for Google APIs
-          await sleep(400);
-          const distance = getDistanceFromLatLonInKm(
-            postcode.latitude,
-            postcode.longitude,
-            listing.latitude,
-            listing.longitude
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    await page.goto(
+      "https://www.zoopla.co.uk/to-rent/property/sw19-7nb/?beds_min=2&price_max=1500&price_min=900&page_size=100&added=14_days&results_sort=lowest_price&search_source=home&radius=5&price_frequency=per_month&pn=1"
+    );
+    await page.waitFor(2 * 1000);
+    let count = await page.evaluate(sel => {
+      return document.querySelector(sel);
+    }, "#content > div.listing-results-utils-view.clearfix.bg-muted > div.split3l > span.listing-results-utils-count");
+    console.log("count: ", count);
+
+    const response = await axios.get(`${propertiesUrl}${postcode.text}`);
+    const listings = response.data.listing;
+    for (const listing of listings) {
+      const property = await Property.findOne({
+        listing_id: listing.listing_id
+      });
+      const today = moment();
+      const listingDate = moment(listing.first_published_date);
+      if (!property && today.diff(listingDate, "day") <= 14) {
+        console.log(property);
+        console.log(count);
+        console.log(postcode);
+        console.log(listing.listing_id);
+        count++;
+        // 10 requests per second for Google APIs
+        await sleep(400);
+        const distance = getDistanceFromLatLonInKm(
+          postcode.latitude,
+          postcode.longitude,
+          listing.latitude,
+          listing.longitude
+        );
+        let trainStations, busStops, supermarkets;
+        try {
+          trainStations = await axios.get(
+            `${trainStationsUrl}${listing.latitude},${listing.longitude}`
           );
-          let trainStations, busStops, supermarkets;
-          try {
-            trainStations = await axios.get(
-              `${trainStationsUrl}${listing.latitude},${listing.longitude}`
-            );
-            busStops = await axios.get(
-              `${busStopsUrl}${listing.latitude},${listing.longitude}`
-            );
-            supermarkets = await axios.get(
-              `${supermarketsUrl}${listing.latitude},${listing.longitude}`
-            );
-          } catch (error) {
-            console.log(error);
-          }
-          trainStations = trainStations.data.results.slice(0, 3);
-          busStops = busStops.data.results.slice(0, 3);
-          supermarkets = supermarkets.data.results.slice(0, 3);
-          trainStations = trainStations.map(trainStation => {
-            let distance = getDistanceFromLatLonInKm(
-              listing.latitude,
-              listing.longitude,
-              trainStation.geometry.location.lat,
-              trainStation.geometry.location.lng
-            );
-            distance = distance.toFixed(3);
-            return {
-              name: trainStation.name,
-              distance: distance
-            };
-          });
-          busStops = busStops.map(busStop => {
-            let distance = getDistanceFromLatLonInKm(
-              listing.latitude,
-              listing.longitude,
-              busStop.geometry.location.lat,
-              busStop.geometry.location.lng
-            );
-            distance = distance.toFixed(3);
-            return {
-              name: busStop.name,
-              distance: distance
-            };
-          });
-          supermarkets = supermarkets.map(supermarket => {
-            let distance = getDistanceFromLatLonInKm(
-              listing.latitude,
-              listing.longitude,
-              supermarket.geometry.location.lat,
-              supermarket.geometry.location.lng
-            );
-            distance = distance.toFixed(3);
-            return {
-              name: supermarket.name,
-              distance: distance
-            };
-          });
-          listing["status"] = "new";
-          listing["original_postcode"] = postcode.text;
-          listing["distance"] = distance.toFixed(3);
-          listing["train_stations"] = trainStations;
-          listing["bus_stops"] = busStops;
-          listing["supermarkets"] = supermarkets;
-          let newProperty = new Property(listing);
-          await newProperty.save();
+          busStops = await axios.get(
+            `${busStopsUrl}${listing.latitude},${listing.longitude}`
+          );
+          supermarkets = await axios.get(
+            `${supermarketsUrl}${listing.latitude},${listing.longitude}`
+          );
+        } catch (error) {
+          console.log(error);
         }
+        trainStations = trainStations.data.results.slice(0, 3);
+        busStops = busStops.data.results.slice(0, 3);
+        supermarkets = supermarkets.data.results.slice(0, 3);
+        trainStations = trainStations.map(trainStation => {
+          let distance = getDistanceFromLatLonInKm(
+            listing.latitude,
+            listing.longitude,
+            trainStation.geometry.location.lat,
+            trainStation.geometry.location.lng
+          );
+          distance = distance.toFixed(3);
+          return {
+            name: trainStation.name,
+            distance: distance
+          };
+        });
+        busStops = busStops.map(busStop => {
+          let distance = getDistanceFromLatLonInKm(
+            listing.latitude,
+            listing.longitude,
+            busStop.geometry.location.lat,
+            busStop.geometry.location.lng
+          );
+          distance = distance.toFixed(3);
+          return {
+            name: busStop.name,
+            distance: distance
+          };
+        });
+        supermarkets = supermarkets.map(supermarket => {
+          let distance = getDistanceFromLatLonInKm(
+            listing.latitude,
+            listing.longitude,
+            supermarket.geometry.location.lat,
+            supermarket.geometry.location.lng
+          );
+          distance = distance.toFixed(3);
+          return {
+            name: supermarket.name,
+            distance: distance
+          };
+        });
+        listing["status"] = "new";
+        listing["original_postcode"] = postcode.text;
+        listing["distance"] = distance.toFixed(3);
+        listing["train_stations"] = trainStations;
+        listing["bus_stops"] = busStops;
+        listing["supermarkets"] = supermarkets;
+        let newProperty = new Property(listing);
+        await newProperty.save();
       }
     }
     res.send("Download complete.");
   } catch (e) {
     next(e);
   }
+};
+
+exports.getPostcodes = function(req, res, next) {
+  res.send({ postcodes: postcodes });
 };
 
 exports.getPropertiesByPostcode = async function(req, res, next) {
